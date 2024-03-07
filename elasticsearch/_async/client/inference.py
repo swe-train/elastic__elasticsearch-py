@@ -24,6 +24,7 @@ from .utils import SKIP_IN_PATH, _quote, _rewrite_parameters
 
 
 class InferenceClient(NamespacedClient):
+
     @_rewrite_parameters()
     async def delete_model(
         self,
@@ -47,7 +48,11 @@ class InferenceClient(NamespacedClient):
             raise ValueError("Empty value passed for parameter 'task_type'")
         if model_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'model_id'")
-        __path = f"/_inference/{_quote(task_type)}/{_quote(model_id)}"
+        __path_parts: t.Dict[str, str] = {
+            "task_type": _quote(task_type),
+            "model_id": _quote(model_id),
+        }
+        __path = f'/_inference/{__path_parts["task_type"]}/{__path_parts["model_id"]}'
         __query: t.Dict[str, t.Any] = {}
         if error_trace is not None:
             __query["error_trace"] = error_trace
@@ -59,7 +64,12 @@ class InferenceClient(NamespacedClient):
             __query["pretty"] = pretty
         __headers = {"accept": "application/json"}
         return await self.perform_request(  # type: ignore[return-value]
-            "DELETE", __path, params=__query, headers=__headers
+            "DELETE",
+            __path,
+            params=__query,
+            headers=__headers,
+            endpoint_id="inference.delete_model",
+            path_parts=__path_parts,
         )
 
     @_rewrite_parameters()
@@ -85,7 +95,11 @@ class InferenceClient(NamespacedClient):
             raise ValueError("Empty value passed for parameter 'task_type'")
         if model_id in SKIP_IN_PATH:
             raise ValueError("Empty value passed for parameter 'model_id'")
-        __path = f"/_inference/{_quote(task_type)}/{_quote(model_id)}"
+        __path_parts: t.Dict[str, str] = {
+            "task_type": _quote(task_type),
+            "model_id": _quote(model_id),
+        }
+        __path = f'/_inference/{__path_parts["task_type"]}/{__path_parts["model_id"]}'
         __query: t.Dict[str, t.Any] = {}
         if error_trace is not None:
             __query["error_trace"] = error_trace
@@ -97,7 +111,12 @@ class InferenceClient(NamespacedClient):
             __query["pretty"] = pretty
         __headers = {"accept": "application/json"}
         return await self.perform_request(  # type: ignore[return-value]
-            "GET", __path, params=__query, headers=__headers
+            "GET",
+            __path,
+            params=__query,
+            headers=__headers,
+            endpoint_id="inference.get_model",
+            path_parts=__path_parts,
         )
 
     @_rewrite_parameters(
@@ -132,7 +151,11 @@ class InferenceClient(NamespacedClient):
             raise ValueError("Empty value passed for parameter 'model_id'")
         if input is None and body is None:
             raise ValueError("Empty value passed for parameter 'input'")
-        __path = f"/_inference/{_quote(task_type)}/{_quote(model_id)}"
+        __path_parts: t.Dict[str, str] = {
+            "task_type": _quote(task_type),
+            "model_id": _quote(model_id),
+        }
+        __path = f'/_inference/{__path_parts["task_type"]}/{__path_parts["model_id"]}'
         __query: t.Dict[str, t.Any] = {}
         __body: t.Dict[str, t.Any] = body if body is not None else {}
         if error_trace is not None:
@@ -154,7 +177,13 @@ class InferenceClient(NamespacedClient):
         if __body is not None:
             __headers["content-type"] = "application/json"
         return await self.perform_request(  # type: ignore[return-value]
-            "POST", __path, params=__query, headers=__headers, body=__body
+            "POST",
+            __path,
+            params=__query,
+            headers=__headers,
+            body=__body,
+            endpoint_id="inference.inference",
+            path_parts=__path_parts,
         )
 
     @_rewrite_parameters(
@@ -191,7 +220,11 @@ class InferenceClient(NamespacedClient):
             )
         elif model_config is not None and body is not None:
             raise ValueError("Cannot set both 'model_config' and 'body'")
-        __path = f"/_inference/{_quote(task_type)}/{_quote(model_id)}"
+        __path_parts: t.Dict[str, str] = {
+            "task_type": _quote(task_type),
+            "model_id": _quote(model_id),
+        }
+        __path = f'/_inference/{__path_parts["task_type"]}/{__path_parts["model_id"]}'
         __query: t.Dict[str, t.Any] = {}
         if error_trace is not None:
             __query["error_trace"] = error_trace
@@ -208,5 +241,11 @@ class InferenceClient(NamespacedClient):
         if __body is not None:
             __headers["content-type"] = "application/json"
         return await self.perform_request(  # type: ignore[return-value]
-            "PUT", __path, params=__query, headers=__headers, body=__body
+            "PUT",
+            __path,
+            params=__query,
+            headers=__headers,
+            body=__body,
+            endpoint_id="inference.put_model",
+            path_parts=__path_parts,
         )
